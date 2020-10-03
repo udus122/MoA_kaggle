@@ -1,5 +1,28 @@
 # Mechanisms of Action (MoA) Prediction
 
+## コンペの目的
+
+細胞のサンプルに薬剤を作用させた場合の、細胞の遺伝子発現や細胞生存率や作用処理の種類、作用させた時間、薬剤の用量から、薬剤の治療効果を及ぼす仕組みのタイプを予測すること。
+
+## データの項目の説明
+
+### train_features.csv(149.1 MB)
+
+| 名前 | データタイプ | 尺度 | 説明 |
+|---|---|---|
+| sig_id | string | 名義尺度 | 薬のid。id_ランダム文字列の形式 |
+| cp_type | string(category) | 名義尺度 | 細胞に対する処理の内容。`cp_vehicle`: 化合物を作用させている。 `ctrl_vehicle`: 細胞の摂動を制御する処理を行っている。 |
+| cp_time | integer(category) | 比例尺度 | 細胞に対する処理時間。24時間、48時間、72時間の3種類のカテゴリがある。 型は数値だが、実質カテゴリ型であることに注意する。|
+| cp_dose | string(category) | 薬剤の投与量? D1とD2の2種類|
+| g- | float | 比例尺度 | 遺伝子発現に関するデータ。数値が何を意味しているのかは要調査 |
+| c- | float | 比例尺度 | 遺伝子生存率。数値が何を意味しているのかは要調査 |
+
+## 用語集
+
+| 単語 | 和訳 | 説明 | Ref |
+|---|---|---|---|
+| MoA(Mechanism of Action) | 作用機序 | 薬が治療効果を及ぼす仕組み | [作用機序 \| がん情報サイト「オンコロ」](https://oncolo.jp/dictionary/sayoukoujyo) |
+
 ## Overview(和訳)
 
 <summary>
@@ -110,13 +133,17 @@ train_features.csv - Features for the training set. Features g- signify gene 
 
 </details>
 <summary>
+
 train_targets_scored.csv - スコアリングされたバイナリMoAターゲット。
+> 学習時の目的変数となるカラムが含まれているテーブル
+
 </summary>
 <details>
 train_targets_scored.csv - The binary MoA targets that are scored.
 </details>
 <summary>
 train_targets_nonscored.csv - 付加的な(オプション)訓練データに対するバイナリMoA反応。これらは予測もスコアリングもされません。
+> 学習の結果このクラスだと予測する必要はないが、
 </summary>
 <details>
 train_targets_nonscored.csv - Additional (optional) binary MoA responses for the training data. These are not predicted nor scored.
@@ -133,3 +160,11 @@ sample_submission.csv - 正しい形式の提出ファイル
 <details>
 sample_submission.csv - A submission file in the correct format.
 </details>
+
+## log
+
+### 2020-10-03
+
+#### Discussions
+
+sig_id理解に役立った - https://www.kaggle.com/c/lish-moa/discussion/186426
