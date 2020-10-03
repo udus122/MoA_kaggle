@@ -25,7 +25,7 @@ In the past, scientists derived drugs from natural products or were inspired by 
 <summary>
 どのようにして、新しい薬の効く仕組みは決まるのでしょうか?
 </summary>
-<details>    
+<details>
 How do we determine the MoAs of a new drug?
 </details>
 <summary>
@@ -74,29 +74,31 @@ This is a Code Competition. Refer to [Code Requirements](https://www.kaggle.com
 ## Data
 
 ### Data Description
+
 <summary>
 コンペでは、遺伝子発現データや細胞生存率など様々な投入変数をもつ異なるサンプル(sig_id)のMoA反応の複数ターゲットを予測します。
 </summary>
 <details>
 In this competition, you will be predicting multiple targets of the Mechanism of Action (MoA) response(s) of different samples (sig_id), given various inputs such as gene expression data and cell viability data.
-</details>
-
-#### Two notes:
+</details>  
 
 <summary>
-訓練データはテストデータには含まれず、スコアリングにも利用されない付加的な(オプションの)MoAラベルを持っています。
+2つの注意点
+
+- 訓練データはテストデータには含まれず、スコアリングにも利用されない付加的な(オプションの)MoAラベルを持っています。
+- 再実行されるデータセットには、パブリックテストで見られる約4倍のデータがあります。
+
 </summary>
 <details>
-the training data has an additional (optional) set of MoA labels that are __not__ included in the test data and not used for scoring.
-</details>
-<summary>
-再実行されるデータセットには、パブリックテストで見られる約4倍のデータがあります。
-</summary>
-<details>
-the re-run dataset has approximately 4x the number of examples seen in the Public test.
+Two notes:
+
+- the training data has an additional (optional) set of MoA labels that are __not__ included in the test data and not used for scoring.
+- the re-run dataset has approximately 4x the number of examples seen in the Public test.
+
 </details>
   
 ### Files
+
 <summary>
 
 train_features.csv - 学習データの特徴量。`g-`から始まるものは遺伝子発現データを表していて、`c-`から始まるものは、細胞生存率データを表しています。`cp_type`は化合物(cp_vehicle)や [摂動](https://www.weblio.jp/content/Perturbation)制御(ctrl_vehicle)の処理をされたサンプルを示す。摂動制御はMoAを持ちません。`cp_time`と`cp_dose`は処理時間(24,48,72時間)と用量(高いか低い)を指します。
