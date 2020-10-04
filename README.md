@@ -4,23 +4,27 @@
 
 細胞のサンプルに薬剤を作用させた場合の、細胞の遺伝子発現や細胞生存率や作用処理の種類、作用させた時間、薬剤の用量から、薬剤の治療効果を及ぼす仕組みのタイプを予測すること。
 
+他クラス分類ではなく、多ラベル分類のコンペであることに注意する。
+一つのレコードが同時に複数のクラスに属する場合がある問題である。
+![multi-label-classification](<https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4616296%2Fdf4d1f41c372487daa4ddf9fec9e7f46%2FScreenshot_2020-09-05%2040250%20jpg%20(JPEG%20Image%201277%20%20723%20pixels).png?generation=1599297444118954&alt=media>)
+
 ## データの項目の説明
 
 ### train_features.csv(149.1 MB)
 
-| 名前 | データタイプ | 尺度 | 説明 |
-| --- | --- | --- | --- |
-| sig_id | string | 名義尺度 | 薬のid。id_ランダム文字列の形式 |
-| cp_type | string(category) | 名義尺度 | 細胞に対する処理の内容。`cp_vehicle`: 化合物を作用させている。 `ctrl_vehicle`: 細胞の摂動を制御する処理を行っている。 |
-| cp_time | integer(category) | 比例尺度 | 細胞に対する処理時間。24時間、48時間、72時間の3種類のカテゴリがある。 型は数値だが、実質カテゴリ型であることに注意する。 |
-| cp_dose | string(category) | 薬剤の投与量? D1とD2の2種類 |
-| g- | float | 比例尺度 | 遺伝子発現に関するデータ。数値が何を意味しているのかは要調査 |
-| c- | float | 比例尺度 | 遺伝子生存率。数値が何を意味しているのかは要調査 |
+| 名前    | データタイプ      | 尺度     | 説明                                                                                                                                                                                                                                           |
+| ------- | ----------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| sig_id  | string            | 名義尺度 | 細胞に対する処理を識別する id。id\_ランダム文字列の形式                                                                                                                                                                                        |
+| cp_type | string(category)  | 名義尺度 | 細胞に対する処理の内容。`cp_vehicle`: 化合物を作用させている。 `ctrl_vehicle`: 細胞の摂動を制御する処理を行っている。                                                                                                                          |
+| cp_time | integer(category) | 順序尺度 | 細胞に対する処理時間。24 時間、48 時間、72 時間の 3 種類のカテゴリがある。 型は数値だが、実質カテゴリ型であることに注意する。                                                                                                                  |
+| cp_dose | string(category)  | 名義尺度 | 薬剤の投与量? D1 と D2 の 2 種類                                                                                                                                                                                                               |
+| g-      | float             | 比例尺度 | 遺伝子の発現の度合い。処理によってその遺伝子の発現の度合いがどのくらい変化したかを表す指標?遺伝子の実際の名前は、隠されていて`g-`の形式で表されていることに注意。                                                                              |
+| c-      | float             | 比例尺度 | 遺伝子生存率。各処理(`sig_id`)100 株の細胞に対して同様の処理を行っている。その処理によって何%の細胞が死滅せずに生き残ったのかを表すイメージか?負の値になっている場合は、正規化処理が原因のようで、すべての細胞が死滅したと解釈すれば良さそう。 |
 
 ## 用語集
 
-| 単語 | 和訳 | 説明 | Ref |
-|---|---|---|---|
+| 単語                     | 和訳     | 説明                       | Ref                                                                                | \*\*\*\* |
+| ------------------------ | -------- | -------------------------- | ---------------------------------------------------------------------------------- | -------- |
 | MoA(Mechanism of Action) | 作用機序 | 薬が治療効果を及ぼす仕組み | [作用機序 \| がん情報サイト「オンコロ」](https://oncolo.jp/dictionary/sayoukoujyo) |
 
 ## Overview(和訳)
@@ -103,19 +107,19 @@ This is a Code Competition. Refer to [Code Requirements](https://www.kaggle.com
 </summary>
 <details>
 In this competition, you will be predicting multiple targets of the Mechanism of Action (MoA) response(s) of different samples (sig_id), given various inputs such as gene expression data and cell viability data.
-</details>  
+</details>
 
 <summary>
 2つの注意点
 
-- 訓練データはテストデータには含まれず、スコアリングにも利用されない付加的な(オプションの)MoAラベルを持っています。
-- 再実行されるデータセットには、パブリックテストで見られる約4倍のデータがあります。
+- 訓練データはテストデータには含まれず、スコアリングにも利用されない付加的な(オプションの)MoA ラベルを持っています。
+- 再実行されるデータセットには、パブリックテストで見られる約 4 倍のデータがあります。
 
 </summary>
 <details>
 Two notes:
 
-- the training data has an additional (optional) set of MoA labels that are __not__ included in the test data and not used for scoring.
+- the training data has an additional (optional) set of MoA labels that are **not** included in the test data and not used for scoring.
 - the re-run dataset has approximately 4x the number of examples seen in the Public test.
 
 </details>
@@ -124,7 +128,7 @@ Two notes:
 
 <summary>
 
-train_features.csv - 学習データの特徴量。`g-`から始まるものは遺伝子発現データを表していて、`c-`から始まるものは、細胞生存率データを表しています。`cp_type`は化合物(cp_vehicle)や [摂動](https://www.weblio.jp/content/Perturbation)制御(ctrl_vehicle)の処理をされたサンプルを示す。摂動制御はMoAを持ちません。`cp_time`と`cp_dose`は処理時間(24,48,72時間)と用量(高いか低い)を指します。
+train_features.csv - 学習データの特徴量。`g-`から始まるものは遺伝子発現データを表していて、`c-`から始まるものは、細胞生存率データを表しています。`cp_type`は化合物(cp_vehicle)や [摂動](https://www.weblio.jp/content/Perturbation)制御(ctrl_vehicle)の処理をされたサンプルを示す。摂動制御は MoA を持ちません。`cp_time`と`cp_dose`は処理時間(24,48,72 時間)と用量(高いか低い)を指します。
 
 </summary>
 <details>
@@ -134,7 +138,8 @@ train_features.csv - Features for the training set. Features g- signify gene 
 </details>
 <summary>
 
-train_targets_scored.csv - スコアリングされたバイナリMoAターゲット。
+train_targets_scored.csv - スコアリングされたバイナリ MoA ターゲット。
+
 > 学習時の目的変数となるカラムが含まれているテーブル
 
 </summary>
@@ -165,6 +170,26 @@ sample_submission.csv - A submission file in the correct format.
 
 ### 2020-10-03
 
-#### Discussions
+- sig_id 理解に役立った
+  https://www.kaggle.com/c/lish-moa/discussion/186426
 
-sig_id理解に役立った - https://www.kaggle.com/c/lish-moa/discussion/186426
+- `g-`の意味
+
+> g-1、g-2、…。、g-772 は、サンプル中の各遺伝子 1、2、…、772 の mRNA レベルの正規化された値を表します。（[伝令 RNA|Wikipedia](https://ja.wikipedia.org/wiki/%E4%BC%9D%E4%BB%A4RNA)）
+> 大まかに言えば、gx の高い絶対値（> 2 または<-2）は、薬物または摂動が遺伝子 x に「有意な」影響を及ぼしたことを示し、ゼロに近い値は、その遺伝子の影響が測定不能であることを意味します。
+> mRNA のレベルは、ここで報告されているものと同様のプロトコルに基づいています
+> https://clue.io/connectopedia/what_is_l1000
+> 正規化は、ここで説明されている分位数の正規化に基づいています
+> https://clue.io/connectopedia/glossary#Q
+
+- 目的変数同士の相関係数を取るのがいいらしい
+  https://www.kaggle.com/c/lish-moa/discussion/180092
+
+- cp_type=`cp_vehicle`は対照群を表している。あえて何もしなかった時に細胞の遺伝子発現と生存率がどうなるか
+  https://www.kaggle.com/c/lish-moa/discussion/184005
+
+- [Mechanisms of Action (MoA) Prediction | Kaggle](https://www.kaggle.com/c/lish-moa/discussion/184005)この Discussion めっちゃ良さそう 後で読む
+
+### 2020-10-04
+
+- prettier を導入
