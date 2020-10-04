@@ -1,0 +1,18 @@
+{
+  "name": "moa_kaggle",
+  "version": "1.0.0",
+  "repository": "https://github.com/yudai1202/MoA_kaggle.git",
+  "author": "yudai1202 <u.yudai1202@gmail.com>",
+  "private": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "pre-push": "yarn lint"
+    }
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0"
+  }
+}
